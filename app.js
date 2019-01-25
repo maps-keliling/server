@@ -1,9 +1,13 @@
-var express = require('express');
+require('dotenv').config()
+const express = require('express');
+const cors = require('cors')
+const indexRouter = require('./routes/index');
+const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
+mongoose.connect('mongodb://localhost/keliling', { useNewUrlParser: true });
+const app = express();
 
-var app = express();
-
+app.use(cors())
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
