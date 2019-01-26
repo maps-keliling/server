@@ -24,10 +24,26 @@ module.exports = {
             }
           }).catch((err) => {
             res.status(400).json({
-                message: err.message
+                message: err.message,
             })
           });
       }
     })
+  },
+  sellerAccess(req, res, next) {
+    const user = req._currentUser
+
+    if (user.role === 'seller') {
+      next()
+    } else {
+      res.status(400).json({
+        message: 'you are not authorized to access'
+      })
+    }
+  },
+  authorization(req, res, next) {
+    const user = req._currentUser
+    const itemId = req.params.itemId
+    // if () 
   }
 }

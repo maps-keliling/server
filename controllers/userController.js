@@ -66,7 +66,10 @@ class userController {
 
   static addPhoto(req, res) {
     const { username } = req._currentUser
-    const urlProfilePic = req.file.cloudStoragePublicUrl
+    let urlProfilePic = ''
+    if (req.file) {
+      urlProfilePic = req.file.cloudStoragePublicUrl
+    }
     User.findOneAndUpdate({
       username: username
     }, {
