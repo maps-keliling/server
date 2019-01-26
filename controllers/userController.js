@@ -65,7 +65,24 @@ class userController {
   }
 
   static addPhoto(req, res) {
-    
+    const { username } = req._currentUser
+    const urlProfilePic = req.file.cloudStoragePublicUrl
+    User.findOneAndUpdate({
+      username: username
+    }, {
+      profilePic: urlProfilePic
+    }, {
+      new: true
+    })
+      .then((result) => {
+        res.status(200).json({
+          info: 'Profile picture has been update',
+          data: result
+        })
+      }).catch((err) => {
+        res.status(400).json(err.erros)
+      });
+    // res.json({picture: req.file.cloudStoragePublicUrl,})
   }
 }
 
