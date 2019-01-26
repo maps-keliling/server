@@ -8,7 +8,7 @@ const buyerSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    minlength: [11, 'Minimun phone number length is 11'],
+    minlength: [10, 'Minimun phone number length is 11'],
     maxlength: [13, 'Maximum phone number length is 13'],
   },
   address: {
@@ -43,7 +43,11 @@ const buyerSchema = new mongoose.Schema({
   },
   role: {
     type: String
-  }
+  },
+  itemList: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item'
+  }]
 })
 
 
