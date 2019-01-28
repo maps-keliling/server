@@ -2,16 +2,36 @@ const app = require('../app');
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const expect = chai.expect;
-const clearUser = require('../helpers/clearUser')
+const User = require('../models/User')
 
 chai.use(chaiHttp)
 
 before(function(done) {
-    clearUser(done);    
+    // clearUser(done);
+    if(process.env.NODE_ENV === 'TEST') {
+        User.deleteMany({})
+        .then(() => {
+            done();
+        })
+        .catch(err => {
+          //   console.log(err);
+            done();
+        });
+    }
 });
 
 after((done) => {
-    clearUser(done);
+    // clearUser(done);
+    if(process.env.NODE_ENV === 'TEST') {
+        User.deleteMany({})
+        .then(() => {
+            done();
+        })
+        .catch(err => {
+          //   console.log(err);
+            done();
+        });
+    }
 });
 
 let token = '';

@@ -2,7 +2,6 @@ const app = require('../app');
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const expect = chai.expect;
-const clearUser = require('../helpers/clearUser')
 
 chai.use(chaiHttp)
 
@@ -185,7 +184,7 @@ describe('Testing for create item', () => {
   })
 })
 
-describe('Testing for find item', () => {
+describe('Testing for find item list', () => {
   it('Should return all item list', (done) => {
     chai.request(app)
         .get('/items')
@@ -211,3 +210,7 @@ describe('Testing for find item', () => {
         })
   })
 })
+
+// describe('Testing for find one item', () => {
+//   // it('Should return item detail', (done ))
+// })
