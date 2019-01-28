@@ -9,12 +9,9 @@ const userRouter = require('./routes/user')
 const itemRouter = require('./routes/item')
 const shopRouter = require('./routes/shop')
 const database = require('./helpers/database')
-// console.log(process.env.NODE_ENV)
-// if (process.env.NODE_ENV === 'DEV') {
-  mongoose.connect(database(process.env.NODE_ENV), { useNewUrlParser: true });
-// } else {
-//   mongoose.connect("mongodb://localhost/inginJajanTest", { useNewUrlParser: true });
-// }
+
+//DATABASE CONNECTION
+mongoose.connect(database(process.env.NODE_ENV), { useNewUrlParser: true });
 
 const app = express();
 

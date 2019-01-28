@@ -8,7 +8,7 @@ chai.use(chaiHttp)
 
 describe('Testing for create item', () => {
   it('Should return mLab database', (done) => {
-    expect(database('DEV')).to.equal('mongodb://admin:admin123@ds211865.mlab.com:11865/final-project')
+    expect(database('TEST')).to.equal('mongodb://localhost/inginJajanTest')
     done()
   })
 })
