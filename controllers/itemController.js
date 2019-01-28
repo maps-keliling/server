@@ -1,13 +1,16 @@
 const Item = require('../models/Item')
 const User = require('../models/User')
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.Types.ObjectId
+const Shop = require('../models/Shop')
 
 class itemController {
   static create(req, res) {
     const { name, price } = req.body
     const user = req._currentUser
     const id = mongoose.Types.ObjectId();
+    const shopId = user.shopId
+
+
     let urlProfilePic = ''
     if (req.file) {
       urlProfilePic = req.file.cloudStoragePublicUrl
@@ -23,23 +26,23 @@ class itemController {
     Item.create(data)
       .then((result_item) => {
         // res.json(result_item)
-        return User.findOneAndUpdate({
-          _id: user._id
+        return Shop.findOneAndUpdate({
+          _id: shopId
         }, {
           $push: {itemList: id}
         }, {
           new: true
         }).populate('itemList')
       })
-      .then((result_user) => {
-        // console.log('kesini')
-        res.status(201).json(result_user)
+      .then((result_shop) => {
+        res.status(201).json(result_shop)
       })
       .catch((err) => {
         // console.log('sini')
         res.status(401).json(err)
       });
 
+    // res.json(shopId)
   }
 
   static find(req, res) {
