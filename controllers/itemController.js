@@ -25,7 +25,6 @@ class itemController {
 
     Item.create(data)
       .then((result_item) => {
-        // res.json(result_item)
         return Shop.findOneAndUpdate({
           _id: shopId
         }, {
@@ -38,11 +37,8 @@ class itemController {
         res.status(201).json(result_shop)
       })
       .catch((err) => {
-        // console.log('sini')
-        res.status(401).json(err)
+        res.status(401).json(err.errors)
       });
-
-    // res.json(shopId)
   }
 
   static find(req, res) {
