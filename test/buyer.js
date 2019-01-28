@@ -1,33 +1,37 @@
 const app = require('../app');
-var chai = require('chai')
-var chaiHttp = require('chai-http')
-var expect = chai.expect
+const chai = require('chai')
+const chaiHttp = require('chai-http')
+const expect = chai.expect;
+const clearUser = require('../helpers/clearUser')
+
 chai.use(chaiHttp)
 
+before(function(done) {
+    clearUser(done);    
+});
 
-describe('testing for buyer :', () => {
+after((done) => {
+    clearUser(done);
+});
 
-    beforeEach((done) => {
-        done()
-    })
+let token = '';
 
-    afterEach((done) => {
-        done()
-    })
-
-    it('Should return buyer registered :',(done) => {
+describe('User testing for register case :', () => {
+    it.only('Should return buyer registered :',(done) => {
         let data = {
             name : 'Andre',
             phone : '081367890000',
             address : 'jl.putri rambut selako no.53 rt.30 rw.007',
-            email : 'hokandre@mhs.mdp.ac.id'
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'andreandre'
         }
 
         chai.request(app)
             .post('/register')
             .send(data)
             .end((err, result) => {
-                expect(result).to.have.status(200)
+                expect(result).to.have.status(201)
                 expect(result.body).to.have.property('info')
                 expect(result.body).to.have.property('data')
                 expect(result.body.data).to.have.property('_id')
@@ -37,8 +41,6 @@ describe('testing for buyer :', () => {
                 expect(result.body.data.phone).to.equal(data.phone)
                 expect(result.body.data).to.have.property('address')
                 expect(result.body.data.address).to.equal(data.address)
-                expect(result.body.data).to.have.property('email')
-                expect(result.body.data.email).to.equal(data.email)
                 done()
             })
     })
@@ -47,7 +49,10 @@ describe('testing for buyer :', () => {
             name : '',
             phone : '081367890000',
             address : 'jl.putri rambut selako no.53 rt.30 rw.007',
-            email : 'hokandre@mhs.mdp.ac.id'
+            email : 'hokandre@mhs.mdp.ac.id',
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'andreandre',
         }
 
         chai.request(app)
@@ -55,12 +60,13 @@ describe('testing for buyer :', () => {
             .send(data)
             .end((err, result) => {
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('name')
-                expect(result.body.errors[0].message).to.equal('name must be filled')
+                expect(result).to.have.status(401)
+                expect(result.body).to.be.an('object')
+                expect(result.body).to.have.property('name')
+                expect(result.body.name).to.be.an('object')
+                expect(result.body.name).to.have.property('message')
+                expect(result.body.name.message).to.equal('Name cannot be empty')
+                expect(result.body.name.value).to.equal(data.name)
                 done()
             })
     })
@@ -69,7 +75,10 @@ describe('testing for buyer :', () => {
             name : 'Andre',
             phone : '',
             address : 'jl.putri rambut selako no.53 rt.30 rw.007',
-            email : 'hokandre@mhs.mdp.ac.id'
+            email : 'hokandre@mhs.mdp.ac.id',
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'andreandre',
         }
 
         chai.request(app)
@@ -77,12 +86,13 @@ describe('testing for buyer :', () => {
             .send(data)
             .end((err, result) => {
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('phone')
-                expect(result.body.errors[0].message).to.equal('phone must be filled')
+                expect(result).to.have.status(401)
+                expect(result.body).to.be.an('object')
+                expect(result.body).to.have.property('phone')
+                expect(result.body.phone).to.be.an('object')
+                expect(result.body.phone).to.have.property('message')
+                expect(result.body.phone.message).to.equal('Phone number is required')
+                expect(result.body.phone.value).to.equal(data.phone)
                 done()
             })
     })
@@ -91,20 +101,22 @@ describe('testing for buyer :', () => {
             name : 'Andre',
             phone : '0813670',
             address : 'jl.putri rambut selako no.53 rt.30 rw.007',
-            email : 'hokandre@mhs.mdp.ac.id'
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'andreandre',
         }
 
         chai.request(app)
             .post('/register')
             .send(data)
-            .end((err, result) => {
+            .end((err, result) => {                
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('phone')
-                expect(result.body.errors[0].message).to.equal('phone length minimum 11')
+                expect(result).to.have.status(401)
+                expect(result.body).to.have.property('phone')
+                expect(result.body.phone).to.be.an('object')
+                expect(result.body.phone).to.have.property('message')
+                expect(result.body.phone.message).to.equal('Minimum phone number length is 10')
+                expect(result.body.phone.value).to.equal(data.phone)
                 done()
             })
     })
@@ -113,73 +125,82 @@ describe('testing for buyer :', () => {
             name : 'Andre',
             phone : '08136700000000000000',
             address : 'jl.putri rambut selako no.53 rt.30 rw.007',
-            email : 'hokandre@mhs.mdp.ac.id'
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'andreandre'
         }
 
         chai.request(app)
             .post('/register')
             .send(data)
-            .end((err, result) => {
+            .end((err, result) => {            
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('phone')
-                expect(result.body.errors[0].message).to.equal('phone length maksimum 13')
+                expect(result).to.have.status(401)
+                expect(result.body).to.have.property('phone')
+                expect(result.body.phone).to.be.an('object')
+                expect(result.body.phone).to.have.property('message')
+                expect(result.body.phone.message).to.equal('Maximum phone number length is 13')
+                expect(result.body.phone.value).to.equal(data.phone)
                 done()
             })
     })
     it('Should return error address required :',(done) => {
         let data = {
             name : 'Andre',
-            phone : '08136700000000000000',
+            phone : '081367890000',
             address : '',
-            email : 'hokandre@mhs.mdp.ac.id'
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'andreandre'
         }
 
         chai.request(app)
             .post('/register')
             .send(data)
-            .end((err, result) => {
+            .end((err, result) => {                
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('address')
-                expect(result.body.errors[0].message).to.equal('address must be filled')
+                expect(result).to.have.status(401)
+                expect(result.body).to.have.property('address')
+                expect(result.body.address).to.be.an('object')
+                expect(result.body.address).to.have.property('message')
+                expect(result.body.address.message).to.equal('Address is required')
+                expect(result.body.address.value).to.equal(data.address)
                 done()
             })
     })
-    it('Should return error address required :',(done) => {
+    it('Should return error password required :',(done) => {
         let data = {
             name : 'Andre',
-            phone : '08136700000000000000',
+            phone : '081367890000',
             address : 'Jl. putri rambut selako ',
-            email : ''
+            username: 'andreandre',
+            role: 'buyer',
+            password: ''        
         }
 
         chai.request(app)
             .post('/register')
             .send(data)
             .end((err, result) => {
+                // console.log(result.body)
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('email')
-                expect(result.body.errors[0].message).to.equal('email must be filled')
+                expect(result).to.have.status(401)
+                expect(result.body).to.have.property('password')
+                expect(result.body.password).to.be.an('object')
+                expect(result.body.password).to.have.property('message')
+                expect(result.body.password.message).to.equal('Password is required')
+                expect(result.body.password.value).to.equal(data.password)
                 done()
             })
     })
-    it('Should return error email not unique :',(done) => {
+    it('Should return error password minimum is 5 :', (done) => {
         let data = {
             name : 'Andre',
-            phone : '08136700000000000000',
+            phone : '081367890000',
             address : 'Jl. putri rambut selako ',
-            email : 'hokandre@mhs.mdp.ac.id'
+            username: 'andreandre',
+            role: 'buyer',
+            password: 'and'        
         }
 
         chai.request(app)
@@ -187,14 +208,85 @@ describe('testing for buyer :', () => {
             .send(data)
             .end((err, result) => {
                 expect(err).to.be.a('null')
-                expect(result).to.have.status(400)
-                expect(result.body).to.have.property('errors')
-                expect(result.body.errors).to.be.an('array')
-                expect(result.body.errors[0]).to.be.an('object')
-                expect(result.body.errors[0].path).to.equal('email')
-                expect(result.body.errors[0].message).to.equal('email must be unique')
+                expect(result).to.have.status(401)
+                expect(result.body).to.have.property('password')
+                expect(result.body.password).to.be.an('object')
+                expect(result.body.password).to.have.property('message')
+                expect(result.body.password.message).to.equal('Minimum length of password is 5')
+                expect(result.body.password.value).to.equal(data.password)
                 done()
             })
     })
+});
 
+describe('User testing for login case :', () => {
+    it.only('Should return buyer logged in :', (done) => {
+        let data = {
+            username: 'andreandre',
+            password: 'andreandre'
+        }
+
+        chai.request(app)
+            .post('/login')
+            .send(data)
+            .end((err, result) => {
+                token = result.body.token;
+                expect(result).to.have.status(200)
+                expect(result.body).to.have.property('token')
+                expect(result.body.token).to.be.a('string')
+                expect(result.body).to.have.property('role')
+                done()
+            })
+    });
+    it('Should return error username not found :', (done) => {
+        let data = {
+            username: 'armariena',
+            password: 'desydesy'
+        }
+
+        chai.request(app)
+            .post('/login')
+            .send(data)
+            .end((err, result) => {
+                expect(result).to.have.status(400)
+                expect(result.body).to.have.property('message')
+                expect(result.body.message).to.be.a('string')
+                expect(result.body.message).to.equal('Username not found')
+                done()
+            })
+    })
+    it('Should return error wrong password :', (done) => {
+        let data = {
+            username: 'andreandre',
+            password: 'desydesy'
+        }
+
+        chai.request(app)
+            .post('/login')
+            .send(data)
+            .end((err, result) => {
+                expect(result).to.have.status(400)
+                expect(result.body).to.have.property('message')
+                expect(result.body.message).to.be.a('string')
+                expect(result.body.message).to.equal('Wrong input password')
+                done()
+            })
+    })
+});
+
+describe('User testing for upload profile picture :', () => {
+    it.only('Should return success upload image :', (done) => {
+        chai.request(app)
+            .post('/addPhoto')
+            .set('auth', token)
+            .attach('files', './girl.png', 'girl.png')
+            .end((err, result) => {                
+                console.log(result.body)
+                expect(result).to.have.status(200)
+                expect(result.body).to.have.property('token')
+                expect(result.body.token).to.be.a('string')
+                expect(result.body).to.have.property('role')
+                done()
+            })
+    })
 })
