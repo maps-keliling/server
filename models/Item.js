@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Shop = require('./Shop')
 
 const itemSchema = new Schema({
   name: {
@@ -15,6 +16,7 @@ const itemSchema = new Schema({
     type: String,
   }
 })
+
 
 const Item = mongoose.model('Item', itemSchema)
 

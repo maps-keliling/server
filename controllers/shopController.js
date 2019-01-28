@@ -27,6 +27,41 @@ class shopController {
         res.status(400).json(err.errors)
       });
   }
+
+  static findOne(req, res) {
+    Shop.findOne({
+      _id: req.params.shopId
+    }).populate('itemList')
+      .then((result) => {
+        res.status(200).json(result)
+      }).catch((err) => {
+        res.status(400).json(err.errors)
+      });
+  }
+  
+  static find(req, res) {
+    Shop.find().populate('itemList')
+      .then((result) => {
+        res.status(200).json(result)
+      }).catch((err) => {
+        res.status(400).json(err.errors)
+      });
+  }
+
+  static update(req, res) {
+    Shop.findOneAndUpdate({
+      _id: req.params.shopId
+    }, {
+      brand: req.body.brand
+    }, {
+      new: true
+    }).populate('itemList')
+      .then((result) => {
+        res.status(200).json(result)
+      }).catch((err) => {
+        res.status(400).json(err.errors)
+      });
+  }
 }
 
 

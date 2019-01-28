@@ -1,5 +1,8 @@
 const { verifyToken } = require('../helpers')
 const User = require('../models/User')
+const Shop = require('../models/Shop')
+const Item  = require('../models/Item')
+const mongoose = require('mongoose')
 
 module.exports = {
   authentication(req, res, next) {
@@ -7,7 +10,7 @@ module.exports = {
     verifyToken(token, function(err, result){
       if (err) {
         res.status(400).json({
-            message: err.message
+            message: "Need login access for this action"
         })
       } else {
         User.findOne({
@@ -43,7 +46,54 @@ module.exports = {
   },
   authorization(req, res, next) {
     const user = req._currentUser
+    const shopId = req.params.shopId
     const itemId = req.params.itemId
-    // if () 
+
+    if (shopId) {
+      User.findOne({
+        _id: user._id,
+        shopId: shopId
+      })
+        .then((result) => {
+          if (result) {
+            next()
+          } else {
+            res.status(400).json({
+              message: 'you are not authorized to access',
+            })
+          }
+        }).catch((err) => {
+          res.status(500).json(err.message)
+        });
+    } else {
+      User.findOne({
+        _id: user._id
+      }).populate('shopId')
+        .then((result) => {
+          // console.log(result) 
+          const listItem = result.shopId.itemList
+          let itemFounded = false
+
+          listItem.forEach(each => {
+            if ((''+each) === (''+itemId)) {
+              itemFounded = true
+            }
+          })
+          if (itemFounded) {
+            next()
+          } else {
+            res.status(400).json({
+              message: 'you are not authorized to access',
+            })
+          }
+              
+
+
+        }).catch((err) => {
+          res.status(500).json(err.message)          
+        });
+    }
+    
+   
   }
 }
