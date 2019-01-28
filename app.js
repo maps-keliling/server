@@ -9,7 +9,8 @@ const userRouter = require('./routes/user')
 const itemRouter = require('./routes/item')
 const shopRouter = require('./routes/shop')
 
-if (process.env.NODE_ENV === 'dev') {
+// console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'DEV') {
   mongoose.connect(process.env.MLAB, { useNewUrlParser: true });
 } else {
   mongoose.connect("mongodb://localhost/inginJajanTest", { useNewUrlParser: true });

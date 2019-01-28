@@ -1,5 +1,7 @@
 const User = require('../models/User')
+const Shop = require('../models/Shop')
 const { checkPassword, generateToken } = require('../helpers')
+const mongoose = require('mongoose')
 
 class userController {
   static registerUser(req, res) {
@@ -11,25 +13,55 @@ class userController {
       address,
       username,
       password  } = req.body
-
-    const data = {
-      name,
-      phone,
-      address,
-      username,
-      password,
-      role
-    }
     
-    User.create(data)
-      .then((result) => {
-        res.status(201).json({
-          info: 'Buyer User successfully created',
-          data: result
+    if (role === 'buyer') {
+      const data = {
+        name,
+        phone,
+        address,
+        username,
+        password,
+        role,
+      }
+      
+      User.create(data)
+        .then((result) => {
+          res.status(201).json({
+            info: 'Buyer User successfully created',
+            data: result
+          })
+        }).catch((err) => {
+          res.status(401).json(err.errors )
+        });
+    } else if (role === 'seller') {
+      const newId = mongoose.Types.ObjectId();
+      let result_user = {}
+      const data = {
+        name,
+        phone,
+        address,
+        username,
+        password,
+        role,
+        shopId: newId
+      }
+
+      User.create(data)
+        .then((result) => {
+          result_user = result
+          return Shop.create({
+            _id: newId,
+            brand: req.body.brand
+          })
         })
-      }).catch((err) => {
-        res.status(401).json(err.errors )
-      });
+        .then(() => {
+          res.status(200).json(result_user)
+        })
+        .catch((err) => {
+          res.status(400).json(err.errors)
+        });      
+    }
+
   }
 
   static loginUser(req, res) {
