@@ -83,9 +83,8 @@ class userController {
           data: result
         })
       }).catch((err) => {
-        res.status(400).json(err.erros)
+        res.status(400).json(err.errors)
       });
-    // res.json({picture: req.file.cloudStoragePublicUrl,})
   }
 }
 

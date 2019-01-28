@@ -8,7 +8,7 @@ const buyerSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    minlength: [10, 'Minimun phone number length is 10'],
+    minlength: [10, 'Minimum phone number length is 10'],
     maxlength: [13, 'Maximum phone number length is 13'],
     required: [true, 'Phone number is required']
   },
@@ -35,7 +35,7 @@ const buyerSchema = new mongoose.Schema({
       },
       message: props => `${props.value} has been registered`
     }],
-    required: [true, 'username is required']
+    required: [true, 'Username is required']
   },
   profilePic: {
     type: String
@@ -43,11 +43,11 @@ const buyerSchema = new mongoose.Schema({
   password: {
     type: String,
     minlength: [5, 'Minimum length of password is 5'],
-    required: [true, 'password is required']
+    required: [true, 'Password is required']
   },
   role: {
     type: String,
-    required: [true, 'role is required']
+    required: [true, 'Role is required']
   },
   shopId: {
     type: mongoose.Schema.Types.ObjectId,
