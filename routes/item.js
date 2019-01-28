@@ -22,7 +22,7 @@ router.post('/', authentication, sellerAccess, function(req, res, next) {
 router.get('/', authentication, sellerAccess, itemController.find)
 router.get('/:itemId', authentication, sellerAccess, itemController.findOne)
 router.delete('/:itemId', authentication, sellerAccess, authorization,  itemController.delete)
-router.put('/:itemId', authentication, sellerAccess, authorization, authentication, sellerAccess, function(req, res, next) {
+router.put('/:itemId', authentication, sellerAccess, authorization, function(req, res, next) {
     upload(req, res, function (err) {
         if (err) {
             res.status(400).json({

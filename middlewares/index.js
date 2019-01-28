@@ -18,14 +18,15 @@ module.exports = {
         })
           .then((result) => {
             if(!result) {
-              res.status(400).json({
-                message: 'User not found!'
-              })
+              throw new Error('User not found!')
+              // res.status(400).json({
+              //   message: 'User not found!'
+              // })
             } else {
               req._currentUser = result
               next()
             }
-          }).catch((err) => {
+          }).catch((err) => {          
             res.status(400).json({
                 message: err.message,
             })
@@ -40,7 +41,7 @@ module.exports = {
       next()
     } else {
       res.status(400).json({
-        message: 'you are not authorized to access'
+        message: 'You are not authorized to access'
       })
     }
   },

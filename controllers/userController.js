@@ -55,7 +55,10 @@ class userController {
           })
         })
         .then(() => {
-          res.status(200).json(result_user)
+          res.status(201).json({
+            info: 'Seller User successfully created',
+            data: result_user
+          })
         })
         .catch((err) => {
           res.status(400).json(err.errors)
@@ -87,12 +90,10 @@ class userController {
             })
           }
         } else {
-          res.status(400).json({
-            message: 'Username not found'
-          })
+          throw new Error('Username not found')
         }
       }).catch((err) => {
-        res.status(400).json(err.errors)
+        res.status(400).json({message: err.message})
       });
   }
 
