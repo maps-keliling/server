@@ -10,10 +10,10 @@ const itemRouter = require('./routes/item')
 const shopRouter = require('./routes/shop')
 
 // console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV === 'DEV') {
-  mongoose.connect(process.env.MLAB, { useNewUrlParser: true });
-} else {
+if (process.env.NODE_ENV === 'TEST') {
   mongoose.connect("mongodb://localhost/inginJajanTest", { useNewUrlParser: true });
+} else {
+  mongoose.connect(process.env.MLAB, { useNewUrlParser: true });
 }
 
 const app = express();
