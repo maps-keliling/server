@@ -17,7 +17,7 @@ after((done) => {
 let token = '';
 
 describe('User testing for register case :', () => {
-    it.only('Should return buyer registered :',(done) => {
+    it('Should return buyer registered :',(done) => {
         let data = {
             name : 'Andre',
             phone : '081367890000',
@@ -220,7 +220,7 @@ describe('User testing for register case :', () => {
 });
 
 describe('User testing for login case :', () => {
-    it.only('Should return buyer logged in :', (done) => {
+    it('Should return buyer logged in :', (done) => {
         let data = {
             username: 'andreandre',
             password: 'andreandre'
@@ -275,18 +275,52 @@ describe('User testing for login case :', () => {
 });
 
 describe('User testing for upload profile picture :', () => {
-    it.only('Should return success upload image :', (done) => {
+    it('Should return success upload image :', (done) => {
         chai.request(app)
-            .post('/addPhoto')
+            .post('/users/addPhoto')
             .set('auth', token)
-            .attach('files', './girl.png', 'girl.png')
-            .end((err, result) => {                
-                console.log(result.body)
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .field('Content-Type', 'multipart/form-data')
+            .field('fileName', 'girl.png')
+            .attach('file', './girl.png')
+            .end((err, result) => {
                 expect(result).to.have.status(200)
-                expect(result.body).to.have.property('token')
-                expect(result.body.token).to.be.a('string')
-                expect(result.body).to.have.property('role')
+                expect(result.body).to.have.property('info')
+                expect(result.body.info).to.equal('Profile picture has been update')
+                expect(result.body).to.have.property('data')
+                expect(result.body.data).to.be.an('object')
                 done()
             })
+    })
+    it('Should return error upload image jwt required:', (done) => {
+        const dummyToken = ''
+        chai.request(app)
+            .post('/users/addPhoto')
+            .set('auth', dummyToken)
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .field('Content-Type', 'multipart/form-data')
+            .field('fileName', 'girl.png')
+            .attach('file', './girl.png')
+            .end((err, result) => {
+                expect(result).to.have.status(400)
+                expect(result.body).to.have.property('message')
+                expect(result.body.message).to.equal('jwt must be provided')
+                done()
+            })
+    })
+    it('Should return error image not found', (done) => {
+        chai.request(app)
+                .post('/users/addPhoto')
+                .set('auth', token)
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .field('Content-Type', 'multipart/form-data')
+                .field('fileName', 'scenery.jpg')
+                .attach('file', './scenery.jpg')
+                .end((err, result) => {
+                    expect(result).to.have.status(400)
+                    expect(result.body).to.have.property('message')
+                    expect(result.body.message).to.equal('File too large')
+                    done()
+                })
     })
 })

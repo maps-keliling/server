@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=DEV node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "test": "NODE_ENV=TEST ./node_modules/.bin/_mocha --exit"
+    "test": "NODE_ENV=TEST nyc ./node_modules/.bin/_mocha --exit"
   },
   "dependencies": {
     "@google-cloud/storage": "^2.3.4",
