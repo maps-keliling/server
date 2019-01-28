@@ -14,7 +14,7 @@
 ## Register 
 
 1. URL: **/register** | **POST**
-2. Body : *(brand is for seller only)*
+2. Body : *(brand property is for seller only)*
     ```json
     {
       "role": "seller",
@@ -67,7 +67,6 @@
 
 ## Add Photo Profile
 
-
 1. URL: **/users/addPhoto** | **POST**
 2. Body : 
     ```json
@@ -102,3 +101,171 @@
       }
     ```
 
+## Add Item
+
+1. URL: **/items** | **POST**
+2. Body : 
+    ```json
+      {
+        "name": "Siomay tenggiri genuine",
+        "price": 18000,
+        "file": <YOUR_PHOTO>
+      }
+    ```
+3. Params : -
+4. Header: 
+  ```json
+    {
+      "auth": <YOUR_TOKEN>
+    }
+  ```
+5. Status code: 201 | 401
+6. response:
+    ```json
+     {
+        "itemList": [
+          {
+            "_id": "5c4ebc8a6979475db71c0ac4",
+            "name": "Siomay tenggiri genuine",
+            "price": 18000,
+            "picture": "https://storage.googleapis.com/e-commrece/pempek2.JPG",
+            "__v": 0
+          }
+        ],
+        "_id": "5c4eb57cd865d8549ff60c5e",
+        "brand": "Es serut salju kanada",
+        "__v": 0
+      }
+    ```
+
+## Find Item from Seller's Login
+
+1. URL: **/items** | **GET**
+2. Body : -
+3. Params : -
+4. Header: 
+  ```json
+    {
+      "auth": <YOUR_TOKEN>
+    }
+  ```
+5. Status code: 200 | 400
+6. response:
+    ```json
+     {
+        "itemList": [
+          {
+            "_id": "5c4ebc8a6979475db71c0ac4",
+            "name": "Siomay tenggiri genuine",
+            "price": 18000,
+            "picture": "https://storage.googleapis.com/e-commrece/pempek2.JPG",
+            "__v": 0
+          }
+        ],
+        "_id": "5c4eb57cd865d8549ff60c5e",
+        "brand": "Es serut salju kanada",
+        "__v": 0
+      }
+    ```
+
+## Find One Item For Update
+
+1. URL: **/items** | **PUT**
+2. Body : 
+    ```json
+      {
+        "name": "Mie Ayam Kalkun",
+        "price": 15000,
+        "file": <YOUR_PHOTO>
+      }
+    ```
+3. Params : -
+4. Header: 
+  ```json
+    {
+      "auth": <YOUR_TOKEN>
+    }
+  ```
+5. Status code: 200 | 400
+6. response:
+    ```json
+     {
+        "_id": "5c4eb6d2d865d8549ff60c63",
+        "name": "Mie Ayam Kalkun",
+        "price": 15000,
+        "picture": "https://storage.googleapis.com/e-commrece/mie-ayam.jpg",
+        "__v": 0
+      }
+    ```
+
+## Delete Item
+
+1. URL: **/items/:itemId** | **DELETE**
+2. Body : -
+    ```
+3. Params : -
+4. Header: 
+  ```json
+    {
+      "auth": <YOUR_TOKEN>
+    }
+  ```
+5. Status code: 200| 400
+6. response:
+    ```json
+     {
+        "_id": "5c4e6955780c371c59584d63",
+        "name": "bakso ikan tuna",
+        "price": 12000,
+        "picture": "https://storage.googleapis.com/e-commrece/baksoikan.jpg",
+        "__v": 0
+      }
+    ```
+  
+## Seller Detail
+
+1. URL: **/users/:userId** | **GET**
+2. Body : -
+    ```
+3. Params : -
+4. Header: 
+  ```json
+    {
+      "auth": <YOUR_TOKEN>
+    }
+  ```
+5. Status code: 200| 400
+6. response:
+    ```json
+     {
+      "_id": "5c4eb3edd865d8549ff60c59",
+      "name": "Michael sukri",
+      "phone": "081313131313",
+      "address": "dikosan pokoknya",
+      "username": "sukri123",
+      "password": "$2a$10$xA2Vx0LdyFrEoW13Y57j8OqIEsBoSRvFRLwYz3TxexWUHkvFxYxkO",
+      "role": "seller",
+      "shopId": {
+        "itemList": [
+          {
+            "_id": "5c4eb6d2d865d8549ff60c63",
+            "name": "Mie Ayam Kalkun",
+            "price": 15000,
+            "picture": "https://storage.googleapis.com/e-commrece/mie-ayam.jpg",
+            "__v": 0
+          },
+          {
+            "_id": "5c4eb7f163e4d7588eeed709",
+            "name": "Mie Chicken Dinner",
+            "price": 18000,
+            "picture": "https://storage.googleapis.com/e-commrece/mie-ayam2.jpg",
+            "__v": 0
+          }
+        ],
+        "_id": "5c4eb3edd865d8549ff60c58",
+        "brand": "Mie Ayam Kalkun Pondok Beauty",
+        "__v": 0
+      },
+      "__v": 0
+    }
+    ```
