@@ -119,6 +119,21 @@ class userController {
         res.status(400).json(err.errors)
       });
   }
+
+  static sellerDetail(req, res) {
+    // res.json('testing testing')
+    User.findOne({
+      _id: req.params.userId
+    }).populate({
+      path: 'shopId',
+      populate: { path: 'itemList' }
+    })
+      .then((result) => {
+        res.status(200).json(result)
+      }).catch((err) => {
+        res.status(err.errors)
+      });
+  }
 }
 
 module.exports = userController
