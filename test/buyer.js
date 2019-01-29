@@ -14,7 +14,6 @@ before(function(done) {
             done();
         })
         .catch(err => {
-          //   console.log(err);
             done();
         });
     }
@@ -28,7 +27,6 @@ after((done) => {
             done();
         })
         .catch(err => {
-          //   console.log(err);
             done();
         });
     }
@@ -432,17 +430,17 @@ describe('User testing for upload profile picture :', () => {
     })
     it('Should return error image too large', (done) => {
         chai.request(app)
-                .post('/users/addPhoto')
-                .set('auth', token)
-                .set('Content-Type', 'application/x-www-form-urlencoded')
-                .field('Content-Type', 'multipart/form-data')
-                .field('fileName', 'scenery.jpg')
-                .attach('file', './scenery.jpg')
-                .end((err, result) => {
-                    expect(result).to.have.status(400)
-                    expect(result.body).to.have.property('message')
-                    expect(result.body.message).to.equal('File too large')
-                    done()
-                })
+            .post('/users/addPhoto')
+            .set('auth', token)
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .field('Content-Type', 'multipart/form-data')
+            .field('fileName', 'scenery.jpg')
+            .attach('file', './scenery.jpg')
+            .end((err, result) => {
+                expect(result).to.have.status(400)
+                expect(result.body).to.have.property('message')
+                expect(result.body.message).to.equal('File too large')
+                done()
+            })
     })
 })

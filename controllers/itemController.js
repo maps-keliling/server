@@ -55,11 +55,11 @@ class itemController {
       .then((result_shop) => {
         res.status(200).json(result_shop)
       })
-      .catch((err) => {
-        res.status(400).json({
-          message: err.message
-        })
-      })
+      // .catch((err) => {
+      //   res.status(400).json({
+      //     message: err.message
+      //   })
+      // })
   }
 
   static findOne(req, res) {
@@ -68,7 +68,11 @@ class itemController {
       _id: itemId
     })
       .then((result) => {
-        res.status(200).json(result)
+        if(result) {
+          res.status(200).json(result)
+        } else {
+          throw new Error('Item not found')
+        }
       }).catch((err) => {
         res.status(400).json({
           message: err.message
@@ -94,13 +98,13 @@ class itemController {
       new: true
     })
       .then((result) => {
-        // console.log(result)
         res.status(200).json(result)
-      }).catch((err) => {
-        res.status(400).json({
-          message: err.message
-        })
       })
+      // .catch((err) => {
+      //   res.status(400).json({
+      //     message: err.message
+      //   })
+      // })
   }
 
   static delete(req, res) {
@@ -120,9 +124,9 @@ class itemController {
       .then((result_item) => {
         res.status(200).json(result_item)
       })
-      .catch((err) => {
-        res.status(err.message)
-      });
+      // .catch((err) => {
+      //   res.status(err.message)
+      // });
   }
 }
 

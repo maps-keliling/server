@@ -21,7 +21,7 @@ class shopController {
         }).populate('shopId')
       })
       .then((result_user) => {
-        res.status(200).json(result_user)
+        res.status(201).json(result_user)
       })
       .catch((err) => {
         res.status(400).json(err.errors)
@@ -33,9 +33,13 @@ class shopController {
       _id: req.params.shopId
     }).populate('itemList')
       .then((result) => {
-        res.status(200).json(result)
+        if(result) {
+          res.status(200).json(result)
+        } else {
+          throw new Error('Shop not found')
+        }
       }).catch((err) => {
-        res.status(400).json(err.errors)
+        res.status(400).json({message: err.message})
       });
   }
   
@@ -43,9 +47,10 @@ class shopController {
     Shop.find().populate('itemList')
       .then((result) => {
         res.status(200).json(result)
-      }).catch((err) => {
-        res.status(400).json(err.errors)
-      });
+      })
+      // .catch((err) => {
+      //   res.status(400).json(err.errors)
+      // });
   }
 
   static update(req, res) {
@@ -57,9 +62,13 @@ class shopController {
       new: true
     }).populate('itemList')
       .then((result) => {
-        res.status(200).json(result)
+        if(result.brand) {
+          res.status(200).json(result)
+        } else {
+          throw new Error('Brand name cannot be empty')
+        }
       }).catch((err) => {
-        res.status(400).json(err.errors)
+        res.status(400).json({message: err.message})
       });
   }
 }
