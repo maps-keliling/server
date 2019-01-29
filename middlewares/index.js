@@ -57,9 +57,6 @@ module.exports = {
             next()
           } else {
             throw new Error('You are not authorized to access')
-            // res.status(400).json({
-            //   message: 'You are not authorized to access',
-            // })
           }
         }).catch((err) => {
           res.status(400).json({message: err.message})
@@ -80,12 +77,13 @@ module.exports = {
           if (itemFounded) {
             next()
           } else {
-            res.status(400).json({
-              message: 'You are not authorized to access',
-            })
+            throw new Error('You are not authorized to access')
+            // res.status(400).json({
+            //   message: 'You are not authorized to access',
+            // })
           }
         }).catch((err) => {
-          res.status(500).json(err.message)          
+          res.status(400).json({message: err.message})
         });
     }
     

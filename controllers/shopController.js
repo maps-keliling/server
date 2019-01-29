@@ -47,9 +47,10 @@ class shopController {
     Shop.find().populate('itemList')
       .then((result) => {
         res.status(200).json(result)
-      }).catch((err) => {
-        res.status(400).json(err.errors)
-      });
+      })
+      // .catch((err) => {
+      //   res.status(400).json(err.errors)
+      // });
   }
 
   static update(req, res) {

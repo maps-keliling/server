@@ -3,6 +3,7 @@
 // const chaiHttp = require('chai-http')
 // const expect = chai.expect;
 // const {authentication, sellerAccess, authorization} = require('../middlewares/index')
+// // const sinon = require('sinon')
 
 // chai.use(chaiHttp)
 
@@ -27,6 +28,8 @@
 //   .post('/register')
 //   .send(data)
 //   .end(function(err, result) {
+//     console.log('before==========')
+//     console.log(result.body)
 //     detailSeller = result.body.data
 //     chai
 //     .request(app)
@@ -63,6 +66,8 @@
 // })
 
 // describe('Testing for user authorization', () => {
+//   console.log(detailSeller)
+//   const next = sinon.spy()
 //   const req = {
 //     _currentUser: detailSeller,
 //     params: {
@@ -70,9 +75,10 @@
 //     }
 //   }
 //   const res = {
-//     status = () => {
-
+//     status = (param) => {
+//       return true
 //     }
 //   }
-//   expect(authorization(req, ))
+//   // authorization(req, res, next)
+//   // expect(next)
 // })

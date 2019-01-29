@@ -251,6 +251,33 @@ describe('Testing update item', () => {
     chai.request(app)
         .put(`/items/${item_id}`)
         .set('auth', token)
+        .send(newData)
+        // .set('Content-Type', 'application/x-www-form-urlencoded')
+        // .field('Content-Type', 'multipart/form-data')
+        // .field('fileName', 'boy.png')
+        // .field('name', newData.name)
+        // .field('price', newData.price)
+        // .attach('file', './boy.png')
+        .end((err, result) => {
+          expect(result).to.have.status(200)
+          expect(result.body).to.have.property('_id')
+          expect(result.body._id).to.equal(item_id)
+          expect(result.body).to.have.property('name')
+          expect(result.body.name).to.equal(newData.name)
+          expect(result.body).to.have.property('price')
+          expect(result.body.price).to.equal(newData.price)
+          expect(result.body).to.have.property('picture')
+          done()
+        })
+  })
+  it('Should return success message updated item with image', (done) => {
+    const newData = {
+      name: 'bakso malang',
+      price: 20000
+    }
+    chai.request(app)
+        .put(`/items/${item_id}`)
+        .set('auth', token)
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .field('Content-Type', 'multipart/form-data')
         .field('fileName', 'boy.png')

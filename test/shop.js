@@ -192,4 +192,18 @@ describe('Testing for updating shop brand', () => {
           done()
         })
   })
+  it('Should send error with wrong shopID', (done) => {
+    const brand = 'Mie Ayam Top Markotop SeJakarta'
+    chai.request(app)
+        .put(`/shop/${user_id}`)
+        .set('auth', token)
+        .send({brand})
+        .end((err, result) => {
+          expect(result).to.have.status(400)
+          expect(result.body).to.have.property('message')
+          expect(result.body.message).to.be.a('string')
+          expect(result.body.message).to.equal('You are not authorized to access')
+          done()
+        })
+  })
 })
