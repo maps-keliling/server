@@ -19,9 +19,6 @@ module.exports = {
           .then((result) => {
             if(!result) {
               throw new Error('User not found!')
-              // res.status(400).json({
-              //   message: 'User not found!'
-              // })
             } else {
               req._currentUser = result
               next()
@@ -59,19 +56,19 @@ module.exports = {
           if (result) {
             next()
           } else {
-            res.status(400).json({
-              message: 'you are not authorized to access',
-            })
+            throw new Error('You are not authorized to access')
+            // res.status(400).json({
+            //   message: 'You are not authorized to access',
+            // })
           }
         }).catch((err) => {
-          res.status(500).json(err.message)
+          res.status(400).json({message: err.message})
         });
     } else {
       User.findOne({
         _id: user._id
       }).populate('shopId')
         .then((result) => {
-          // console.log(result) 
           const listItem = result.shopId.itemList
           let itemFounded = false
 
@@ -84,12 +81,9 @@ module.exports = {
             next()
           } else {
             res.status(400).json({
-              message: 'you are not authorized to access',
+              message: 'You are not authorized to access',
             })
           }
-              
-
-
         }).catch((err) => {
           res.status(500).json(err.message)          
         });

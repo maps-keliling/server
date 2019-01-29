@@ -8,6 +8,7 @@ chai.use(chaiHttp)
 let token = '';
 let user_id = '';
 let token_buyer = '';
+let item_id = '';
 
 before(function(done) {
   let data = {
@@ -99,6 +100,7 @@ describe('Testing for create item', () => {
         .field('price', namaBarang.price)
         .attach('file', './girl.png')
         .end((err, result) => {
+          item_id = result.body.itemList[result.body.itemList.length-1]._id;
           expect(result).to.have.status(201)
           expect(result.body).to.have.property('_id')
           expect(result.body).to.have.property('itemList')
@@ -211,6 +213,115 @@ describe('Testing for find item list', () => {
   })
 })
 
-// describe('Testing for find one item', () => {
-//   // it('Should return item detail', (done ))
-// })
+describe('Testing for find one item', () => {
+  it('Should return item detail', (done) => {
+    chai.request(app)
+        .get(`/items/${item_id}`)
+        .set('auth', token)
+        .end((err, result) => {
+          expect(result).to.have.status(200)
+          expect(result.body).to.have.property('_id')
+          expect(result.body._id).to.equal(item_id)
+          expect(result.body).to.have.property('name')
+          expect(result.body).to.have.property('price')
+          expect(result.body).to.have.property('picture')
+          done()
+        })
+  })
+  it('Should return error getting item detail', (done) => {
+    chai.request(app)
+        .get(`/items/5c4f0772077018303976a042`)
+        .set('auth', token)
+        .end((err, result) => {
+          expect(result).to.have.status(400)
+          expect(result.body).to.have.property('message')
+          expect(result.body.message).to.be.a('string')
+          expect(result.body.message).to.equal('Item not found')
+          done()
+        })
+  })
+})
+
+describe('Testing update item', () => {
+  it('Should return success message updated item', (done) => {
+    const newData = {
+      name: 'bakso malang',
+      price: 20000
+    }
+    chai.request(app)
+        .put(`/items/${item_id}`)
+        .set('auth', token)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .field('Content-Type', 'multipart/form-data')
+        .field('fileName', 'boy.png')
+        .field('name', newData.name)
+        .field('price', newData.price)
+        .attach('file', './boy.png')
+        .end((err, result) => {
+          expect(result).to.have.status(200)
+          expect(result.body).to.have.property('_id')
+          expect(result.body._id).to.equal(item_id)
+          expect(result.body).to.have.property('name')
+          expect(result.body.name).to.equal(newData.name)
+          expect(result.body).to.have.property('price')
+          expect(result.body.price).to.equal(newData.price)
+          expect(result.body).to.have.property('picture')
+          done()
+        })
+  })
+  it('Should return error message on update item', (done) => {
+    const newData = {
+      name: 'bakso malang',
+      price: 20000
+    }
+    chai.request(app)
+        .put(`/items/5c4f0772077018303976a042`)
+        .set('auth', token)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .field('Content-Type', 'multipart/form-data')
+        .field('fileName', 'boy.png')
+        .field('name', newData.name)
+        .field('price', newData.price)
+        .attach('file', './boy.png')
+        .end((err, result) => {
+          expect(result).to.have.status(400)
+          expect(result.body).to.have.property('message')
+          expect(result.body.message).to.equal('You are not authorized to access')
+          done()
+        })
+  })
+})
+
+describe('Testing delete item', () => {
+  it('Should return success on delete item', (done) => {
+    chai.request(app)
+        .delete(`/items/${item_id}`)
+        .set('auth', token)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .field('Content-Type', 'multipart/form-data')
+        .field('fileName', 'boy.png')
+        .end((err, result) => {
+          expect(result).to.have.status(200)
+          expect(result.body).to.have.property('_id')
+          expect(result.body._id).to.equal(item_id)
+          expect(result.body).to.have.property('name')
+          expect(result.body).to.have.property('price')
+          expect(result.body).to.have.property('picture')
+          done()
+        })
+  })
+  it('Should return error message on delete item', (done) => {
+    chai.request(app)
+        .delete(`/items/5c4f0772077018303976a042`)
+        .set('auth', token)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .field('Content-Type', 'multipart/form-data')
+        .field('fileName', 'boy.png')
+        .end((err, result) => {
+          expect(result).to.have.status(400)
+          expect(result.body).to.have.property('message')
+          expect(result.body.message).to.equal('You are not authorized to access')
+          done()
+        })
+  })
+})

@@ -14,7 +14,6 @@ before(function(done) {
             done();
         })
         .catch(err => {
-          //   console.log(err);
             done();
         });
     }
@@ -28,7 +27,6 @@ after((done) => {
             done();
         })
         .catch(err => {
-          //   console.log(err);
             done();
         });
     }
