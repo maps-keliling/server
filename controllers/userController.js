@@ -82,7 +82,11 @@ class userController {
                 name: result.name,
                 username: result.username
               }),
-              role: result.role
+              role: result.role,
+              _id: result._id,
+              name: result.name,
+              username: result.username,
+              profilePic: result.profilePic
             })
           } else {
             res.status(400).json({
