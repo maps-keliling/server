@@ -17,5 +17,5 @@ router.post('/addPhoto',authentication, function(req, res, next) {
       // Everything went fine.
     })
 },images.sendUploadToGCS, userController.addPhoto)
-
+router.get('/:userId', authentication, userController.sellerDetail)
 module.exports = router

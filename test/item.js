@@ -101,6 +101,7 @@ describe('Testing for create item', () => {
         .attach('file', './girl.png')
         .end((err, result) => {
           item_id = result.body.itemList[result.body.itemList.length-1]._id;
+          // console.log(result.body)
           expect(result).to.have.status(201)
           expect(result.body).to.have.property('_id')
           expect(result.body).to.have.property('itemList')
