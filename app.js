@@ -1,14 +1,29 @@
-var express = require('express');
+require('dotenv').config()
+const express = require('express');
+const cors = require('cors')
+const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
+// router
+const indexRouter = require('./routes/index');
+const userRouter = require('./routes/user')
+const itemRouter = require('./routes/item')
+const shopRouter = require('./routes/shop')
+const database = require('./helpers/database')
 
-var app = express();
+//DATABASE CONNECTION
+mongoose.connect(database(process.env.NODE_ENV), { useNewUrlParser: true });
 
+const app = express();
+
+app.use(cors())
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
+app.use('/users', userRouter)
+app.use('/items', itemRouter)
+app.use('/shop', shopRouter)
 
 
 module.exports = app;
